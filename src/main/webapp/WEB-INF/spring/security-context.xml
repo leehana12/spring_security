@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+<security:http>
+
+	<security:intercept-url pattern="/sample/all" access="permitAll"/>
+	
+	<security:intercept-url pattern="/sample/member" access="hasRole('ROLE_MEMBER')" />	
+
+	<security:intercept-url pattern="/sample/admin" access="hasRole('ROLE_ADMIN')" />	
+
+
+	<security:form-login/>
+	
+	<!-- 접근금지 페이지에가 떴을떄 에러 페이지로 여결 됬ㅇㄹ -->
+	<security:access-denied-handler error-page="/accessError"/>
+
+</security:http>
+
+<security:authentication-manager>
+	<security:authentication-provider>
+		<security:user-service>
+			<!-- 스프링부트에서는 noop사용이 안된다. 시큐리티에서만 사용가능.noop은 인코딩 없이 사용하는 방식 -->
+			<security:user name="member" password="{noop}member" authorities="ROLE_MEMBER"/>
+
+			<security:user name="admin" password="{noop}admin" 
+				authorities="ROLE_ADMIN, ROLE_MEMBER"/><!-- 사용자 설정 -> ROLE_ADMIN, ROLE_MEMBER 2가지이상 접근 권한을 줄수 있다. -->
+		</security:user-service>
+	</security:authentication-provider>
+
+</security:authentication-manager>
+
+</beans>
