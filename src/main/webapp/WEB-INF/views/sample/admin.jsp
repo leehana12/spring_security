@@ -8,5 +8,7 @@
 </head>
 <body>
 	<h1>/sample/all page</h1>
+	
+	<a href="/cucstomLogout">Logout</a>
 </body>
 </html>

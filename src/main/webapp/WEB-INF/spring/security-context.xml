@@ -13,11 +13,12 @@
 
 	<security:intercept-url pattern="/sample/all" access="permitAll"/>
 	
-	<!-- 등급에 맞는 화면으로 이동하게 해주는 코드이다. -->
+	<!-- 등급에 맞는 화면으로 이동하게 해주는 코드이다. 레벨로 들어갈 수 있는 코드(관리자 사용자) -->
 	<security:intercept-url pattern="/sample/member" access="hasRole('ROLE_MEMBER')" />	
 
 	<security:intercept-url pattern="/sample/admin" access="hasRole('ROLE_ADMIN')" />	
 
+	<!-- 접근금지 페이지에가 떴을떄 에러 페이지로 여결 됬ㅇㄹ -->
 	<!-- <security:access-denied-handler error-page="/accessError" /> 컨트롤러에서 전달된 메세지까지 3개가 보여짐.-->
 	<security:access-denied-handler ref="customAccessDenied" /><!-- accessError페이지로 바로 이동 -->
 
@@ -27,8 +28,11 @@
 	
 	<!-- <security:csrf disabled="true"/> -->
 	
-	<!-- 접근금지 페이지에가 떴을떄 에러 페이지로 여결 됬ㅇㄹ -->
-	<security:access-denied-handler error-page="/accessError"/>
+	<!-- 쿠키섹션은 없애는것(날린다) -->
+	<security:logout logout-url="/customLogout" invalidate-session="true"/>
+	
+	
+
 
 </security:http>
 
