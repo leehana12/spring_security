@@ -1,10 +1,7 @@
 package org.zerock.security;
 
-import static org.hamcrest.CoreMatchers.nullValue;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.util.Iterator;
 
 import javax.sql.DataSource;
 
@@ -15,109 +12,93 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import lombok.Setter;
 import lombok.extern.log4j.Log4j;
-
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({"file:src/main/webapp/WEB-INF/spring/root-context.xml",
+@ContextConfiguration({
+    "file:src/main/webapp/WEB-INF/spring/root-context.xml",
     "file:src/main/webapp/WEB-INF/spring/security-context.xml"})
 @Log4j
 public class MemberTests {
-  
-  @Setter(onMethod_ = @Autowired)
+  @Autowired
   private PasswordEncoder pwencoder;
-  
-  @Setter(onMethod_ = @Autowired)
+
+  @Autowired
   private DataSource ds;
   
+  //더미 데이터 삽입
   @Test
   public void testInsertMember() {
+    String sql = "insert into tbl_member(userid, userpw, username) values (?,?,?)";
     
-    String sql = "insert into tbl_member(userid, userpw, username) values(?,?,?)";
-    
-    for (int i = 0; i < 100; i++) {
-      
+    for(int i = 0; i<100; i++) {
       Connection con = null;
       PreparedStatement pstmt = null;
       
       try {
         con = ds.getConnection();
-        pstmt = con.prepareStatement(sql); // sql 실행
+        pstmt = con.prepareStatement(sql);
         
-        pstmt.setString(2, pwencoder.encode("pw" + i));
-        
-        if(i < 80) {
-          
-          pstmt.setString(1, "user" +i);
+        pstmt.setString(2, pwencoder.encode("pw"+i));
+        if(i<80) { //80번까지 일반사용자
+          pstmt.setString(1, "user"+i);
           pstmt.setString(3, "일반사용자"+i);
-        }else if(i < 90){
           
-          pstmt.setString(1, "manager" +i);
+        }else if(i<90) { //90번까지 운영자
+          pstmt.setString(1, "manager"+i);
           pstmt.setString(3, "운영자"+i);
-        } else {
-          
-          pstmt.setString(1, "admin" +i);
-          pstmt.setString(3, "관리자"+i);          
+        
+        }else { //100번까지 관리자
+          pstmt.setString(1, "admin"+i);
+          pstmt.setString(3, "관리자"+i);
         }
         
-        pstmt.executeUpdate(); // 데이터변경 저장
+        pstmt.executeUpdate();
+        
       } catch (Exception e) {
         e.printStackTrace();
       }finally {
-        if (pstmt != null) { try{ pstmt.close();} catch(Exception e) {}}
-        if (con != null) { try{ con.close();} catch(Exception e) {}}
-      
+        if(pstmt!=null) {try {pstmt.close();} catch (Exception e) {}}
+        if(con!=null) {try {con.close();} catch (Exception e) {}}
       }
-    }//end for
+    }// end for
+    
   }
-
-  //등급을 입력하는 테스트
+  
+  //더미 데이터 삽입
+  @Test
   public void testInsertAuth() {
+    String sql = "insert into tbl_member_auth(userid, auth) values (?,?)";
     
-    String sql = "insert into tbl_member_auth(userid, auth) values(?,?,?)";
-    
-    for (int i = 0; i < 100; i++) {
-      
+    for(int i = 0; i<100; i++) {
       Connection con = null;
       PreparedStatement pstmt = null;
       
       try {
         con = ds.getConnection();
-        pstmt = con.prepareStatement(sql); // sql 실행
-                
-        if(i < 80) {
+        pstmt = con.prepareStatement(sql);
+        
+        if(i<80) { //80번까지 일반사용자
+          pstmt.setString(1, "user"+i);
+          pstmt.setString(2, "ROLE_USER");
           
-          pstmt.setString(1, "user" +i);
-          pstmt.setString(2, "ROLE-USER");
-        }else if(i < 90){
+        }else if(i<90) { //90번까지 운영자
+          pstmt.setString(1, "manager"+i);
+          pstmt.setString(2, "ROLE_MEMBER");
           
-          pstmt.setString(1, "manager" +i);
-          pstmt.setString(2, "ROLE-MEMBER");
-        } else {
-          
-          pstmt.setString(1, "admin" +i);
-          pstmt.setString(2, "ROLE-ADMIN");       
+        }else { //100번까지 관리자
+          pstmt.setString(1, "admin"+i);
+          pstmt.setString(2, "ROLE_ADMIN");
         }
         
-        pstmt.executeUpdate(); // 데이터변경 저장
+        pstmt.executeUpdate();
         
       } catch (Exception e) {
         e.printStackTrace();
       }finally {
-        if (pstmt != null) { try{ pstmt.close();} catch(Exception e) {}}
-        if (con != null) { try{ con.close();} catch(Exception e) {}}
-      
+        if(pstmt!=null) {try {pstmt.close();} catch (Exception e) {}}
+        if(con!=null) {try {con.close();} catch (Exception e) {}}
       }
-    }//end for
-  }  
+    }// end for
+    
+  }
 }
-
-
-
-
-
-
-
-
-
-
