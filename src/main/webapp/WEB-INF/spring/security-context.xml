@@ -5,6 +5,8 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+<bean id="customAccessDenied" class="org.zerock.security.CustomAccessDenideHandler"></bean>
+
 <security:http>
 
 	<security:intercept-url pattern="/sample/all" access="permitAll"/>
@@ -13,8 +15,11 @@
 
 	<security:intercept-url pattern="/sample/admin" access="hasRole('ROLE_ADMIN')" />	
 
+	<!-- <security:access-denied-handler error-page="/accessError" /> 컨트롤러에서 전달된 메세지까지 3개가 보여짐.-->
+	<security:access-denied-handler ref="customAccessDenied" /><!-- accessError페이지로 바로 이동 -->
 
-	<security:form-login/>
+	<!-- <security:form-login/> -->
+	<security:form-login login-page="/customLogin"/>
 	
 	<!-- 접근금지 페이지에가 떴을떄 에러 페이지로 여결 됬ㅇㄹ -->
 	<security:access-denied-handler error-page="/accessError"/>
