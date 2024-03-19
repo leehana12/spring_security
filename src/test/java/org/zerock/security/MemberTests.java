@@ -62,11 +62,54 @@ public class MemberTests {
         
         pstmt.executeUpdate(); // 데이터변경 저장
       } catch (Exception e) {
-        
-      }
+        e.printStackTrace();
+      }finally {
+        if (pstmt != null) { try{ pstmt.close();} catch(Exception e) {}}
+        if (con != null) { try{ con.close();} catch(Exception e) {}}
       
-    }
+      }
+    }//end for
   }
+
+  //등급을 입력하는 테스트
+  public void testInsertAuth() {
+    
+    String sql = "insert into tbl_member_auth(userid, auth) values(?,?,?)";
+    
+    for (int i = 0; i < 100; i++) {
+      
+      Connection con = null;
+      PreparedStatement pstmt = null;
+      
+      try {
+        con = ds.getConnection();
+        pstmt = con.prepareStatement(sql); // sql 실행
+                
+        if(i < 80) {
+          
+          pstmt.setString(1, "user" +i);
+          pstmt.setString(2, "ROLE-USER");
+        }else if(i < 90){
+          
+          pstmt.setString(1, "manager" +i);
+          pstmt.setString(2, "ROLE-MEMBER");
+        } else {
+          
+          pstmt.setString(1, "admin" +i);
+          pstmt.setString(2, "ROLE-ADMIN");       
+        }
+        
+        pstmt.executeUpdate(); // 데이터변경 저장
+        
+      } catch (Exception e) {
+        e.printStackTrace();
+      }finally {
+        if (pstmt != null) { try{ pstmt.close();} catch(Exception e) {}}
+        if (con != null) { try{ con.close();} catch(Exception e) {}}
+      
+      }
+    }//end for
+  }  
 }
 
 
