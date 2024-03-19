@@ -15,12 +15,12 @@
 	
 	<form method="post" action="/login">	
 		<div>
-			<input type="text" name="username" value="admin" />
+			<input type="text" name="username" />
 		</div>
 	
 		<div>
 			<!-- test기 떄문에 admin으로 한것임. testㅣ후 지울것이다. -->
-			<input type="password" name="password" value="admin" />
+			<input type="password" name="password" />
 		</div>
 		<div>
 			<input type="submit"/>

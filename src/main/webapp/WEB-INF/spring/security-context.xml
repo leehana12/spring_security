@@ -6,6 +6,8 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 <bean id="customAccessDenied" class="org.zerock.security.CustomAccessDenideHandler"></bean>
+<bean id="CustomLoginSuccessHandler" class="org.zerock.security.CustomLoginSuccessHandler"/>
+
 
 <security:http>
 
