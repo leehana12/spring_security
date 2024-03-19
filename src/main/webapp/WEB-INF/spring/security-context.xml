@@ -6,13 +6,14 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 <bean id="customAccessDenied" class="org.zerock.security.CustomAccessDenideHandler"></bean>
-<bean id="CustomLoginSuccessHandler" class="org.zerock.security.CustomLoginSuccessHandler"/>
+<bean id="CustomLoginSuccess" class="org.zerock.security.CustomLoginSuccessHandler"/>
 
 
 <security:http>
 
 	<security:intercept-url pattern="/sample/all" access="permitAll"/>
 	
+	<!-- 등급에 맞는 화면으로 이동하게 해주는 코드이다. -->
 	<security:intercept-url pattern="/sample/member" access="hasRole('ROLE_MEMBER')" />	
 
 	<security:intercept-url pattern="/sample/admin" access="hasRole('ROLE_ADMIN')" />	
@@ -21,7 +22,10 @@
 	<security:access-denied-handler ref="customAccessDenied" /><!-- accessError페이지로 바로 이동 -->
 
 	<!-- <security:form-login/> -->
-	<security:form-login login-page="/customLogin"/>
+	<!-- <security:form-login login-page="/customLogin"/> -->
+	<security:form-login login-page="/customLogin" authentication-success-handler-ref="CustomLoginSuccess"/>
+	
+	<!-- <security:csrf disabled="true"/> -->
 	
 	<!-- 접근금지 페이지에가 떴을떄 에러 페이지로 여결 됬ㅇㄹ -->
 	<security:access-denied-handler error-page="/accessError"/>
