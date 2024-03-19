@@ -6,7 +6,8 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 <bean id="customAccessDenied" class="org.zerock.security.CustomAccessDenideHandler"></bean>
-<bean id="CustomLoginSuccess" class="org.zerock.security.CustomLoginSuccessHandler"/>
+<bean id="customLoginSuccess" class="org.zerock.security.CustomLoginSuccessHandler"/>
+<bean id="customPasswordEncoder" class="org.zerock.security.CustomNoOpPasswordEncoder"/>
 
 
 <security:http>
@@ -24,7 +25,7 @@
 
 	<!-- <security:form-login/> -->
 	<!-- <security:form-login login-page="/customLogin"/> -->
-	<security:form-login login-page="/customLogin" authentication-success-handler-ref="CustomLoginSuccess"/>
+	<security:form-login login-page="/customLogin" authentication-success-handler-ref="customLoginSuccess"/>
 	
 	<!-- <security:csrf disabled="true"/> -->
 	
@@ -38,13 +39,8 @@
 
 <security:authentication-manager>
 	<security:authentication-provider>
-		<security:user-service>
-			<!-- 스프링부트에서는 noop사용이 안된다. 시큐리티에서만 사용가능.noop은 인코딩 없이 사용하는 방식 -->
-			<security:user name="member" password="{noop}member" authorities="ROLE_MEMBER"/>
-
-			<security:user name="admin" password="{noop}admin" 
-				authorities="ROLE_ADMIN, ROLE_MEMBER"/><!-- 사용자 설정 -> ROLE_ADMIN, ROLE_MEMBER 2가지이상 접근 권한을 줄수 있다. -->
-		</security:user-service>
+	 	<security:jdbc-user-service data-source-ref="dataSource"/>
+	 	<security:password-encoder ref="customPasswordEncoder"/>
 	</security:authentication-provider>
 
 </security:authentication-manager>

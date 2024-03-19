@@ -9,6 +9,6 @@
 <body>
 	<h1>/sample/all page</h1>
 	
-	<a href="/cucstomLogout">Logout</a>
+	<a href="/customLogout">Logout</a>
 </body>
 </html>
